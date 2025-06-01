@@ -66,6 +66,12 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 		if targetDistance > attackRange-1 {
 			new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, target, 4)
 		}
+
+		for _, u := range new.Units {
+			if rl.Vector2Distance(u.Position, new.Units[i].Position) < 35 {
+				new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, u.Position, -1.5)
+			}
+		}
 	}
 
 	for _, u := range other.Units {

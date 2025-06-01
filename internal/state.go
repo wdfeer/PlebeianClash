@@ -8,8 +8,9 @@ type GameState struct {
 }
 
 type TeamState struct {
-	Tower Tower
-	Units []Unit
+	IsLocal bool
+	Tower   Tower
+	Units   []Unit
 }
 
 type Tower struct {
@@ -31,6 +32,7 @@ const (
 
 var DefaultState = GameState{
 	AState: TeamState{
+		IsLocal: true,
 		Tower: Tower{
 			Position: rl.Vector2{X: 160, Y: 450},
 			Hp:       1000,

@@ -47,7 +47,16 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 
 	for i := range len(new.Units) {
 		target := other.Tower.Position
-		if rl.Vector2Distance(new.Units[i].Position, target) > attackRange-1 {
+		towerDistance := rl.Vector2Distance(new.Units[i].Position, target)
+		targetDistance := towerDistance
+
+		unitIndex, unitDistance := new.Units[i].closestEnemy(other)
+		if unitDistance < towerDistance {
+			target = other.Units[unitIndex].Position
+			targetDistance = unitDistance
+		}
+
+		if targetDistance > attackRange-1 {
 			new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, target, 4)
 		}
 	}
@@ -58,7 +67,7 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 		}
 
 		index, dist := u.closestEnemy(self)
-		if dist < attackRange {
+		if index != -1 && dist < attackRange {
 			new.Units[index].Hp -= attackDamage
 		}
 	}

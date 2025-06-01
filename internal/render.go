@@ -1,6 +1,10 @@
 package internal
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	"strconv"
+
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 func (state GameState) Render() {
 	rl.ClearBackground(rl.Black)
@@ -29,5 +33,12 @@ func (team TeamState) render(color rl.Color) {
 	rl.DrawCircle(int32(team.Tower.Position.X), int32(team.Tower.Position.Y), 32, color)
 	for _, u := range team.Units {
 		rl.DrawCircle(int32(u.Position.X), int32(u.Position.Y), 20, color)
+	}
+
+	if team.IsLocal {
+		text := strconv.FormatFloat(float64(team.Mana), 'f', 1, 32) + " Mana"
+		var textSize int32 = 40
+		textWidth := rl.MeasureText(text, textSize)
+		rl.DrawText(text, 800-(textWidth/2), 840, textSize, rl.SkyBlue)
 	}
 }

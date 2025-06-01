@@ -5,6 +5,8 @@ import rl "github.com/gen2brain/raylib-go/raylib"
 func (state GameState) Render() {
 	rl.ClearBackground(rl.Black)
 
+	rl.DrawLine(800, 0, 800, 900, rl.DarkGray)
+
 	state.AState.render(rl.DarkGreen)
 	state.BState.render(rl.DarkPurple)
 }

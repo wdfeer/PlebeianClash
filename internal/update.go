@@ -13,13 +13,21 @@ func (self GameState) Update() GameState {
 func (self TeamState) update(other TeamState) TeamState {
 	new := self
 
-	if self.IsLocal && rl.IsMouseButtonPressed(rl.MouseLeftButton) && rl.GetMousePosition().X < 800 {
-		new.Units = append(new.Units, Unit{Type: Knight, Hp: 300, Position: rl.GetMousePosition()})
+	new.Mana += 0.01
+
+	if self.IsLocal {
+		if rl.IsMouseButtonPressed(rl.MouseLeftButton) && rl.GetMousePosition().X < 800 && self.Mana >= 1 {
+			new.Units = append(new.Units, Unit{Type: Knight, Hp: 300, Position: rl.GetMousePosition()})
+			new.Mana -= 1
+		}
+	} else {
+		// TODO: spawn units
 	}
 
 	for i := range len(new.Units) {
-		if rl.Vector2Distance(new.Units[i].Position, other.Tower.Position) > 40 {
-			new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, other.Tower.Position, 4)
+		target := other.Tower.Position
+		if rl.Vector2Distance(new.Units[i].Position, target) > 40 {
+			new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, target, 4)
 		}
 	}
 

@@ -11,6 +11,7 @@ type TeamState struct {
 	IsLocal bool
 	Tower   Tower
 	Units   []Unit
+	Mana    float32
 }
 
 type Tower struct {

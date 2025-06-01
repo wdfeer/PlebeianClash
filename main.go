@@ -11,8 +11,10 @@ func main() {
 	defer rl.CloseWindow()
 
 	rl.SetTargetFPS(60)
+	rl.SetExitKey(rl.KeyEscape)
 
 	state := internal.DefaultState
+
 	for !rl.WindowShouldClose() {
 		state = state.Update()
 

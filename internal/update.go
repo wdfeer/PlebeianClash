@@ -3,7 +3,11 @@ package internal
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 func (self GameState) Update() GameState {
-	return GameState{self.AState.update(self.BState), self.BState.update(self.AState)}
+	if self.AState.Tower.Hp > 0 && self.BState.Tower.Hp > 0 {
+		return GameState{self.AState.update(self.BState), self.BState.update(self.AState)}
+	} else {
+		return self
+	}
 }
 
 func (self TeamState) update(other TeamState) TeamState {

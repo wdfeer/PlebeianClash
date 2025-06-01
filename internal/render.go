@@ -5,10 +5,24 @@ import rl "github.com/gen2brain/raylib-go/raylib"
 func (state GameState) Render() {
 	rl.ClearBackground(rl.Black)
 
-	rl.DrawLine(800, 0, 800, 900, rl.DarkGray)
+	if state.AState.Tower.Hp > 0 && state.BState.Tower.Hp > 0 {
+		rl.DrawLine(800, 0, 800, 900, rl.DarkGray)
+	}
 
 	state.AState.render(rl.DarkGreen)
 	state.BState.render(rl.DarkPurple)
+
+	if state.AState.Tower.Hp < 0 {
+		text := "You Lost! Press ESC to Exit."
+		var textSize int32 = 64
+		textWidth := rl.MeasureText(text, textSize)
+		rl.DrawText(text, 800-(textWidth/2), 450, textSize, rl.White)
+	} else if state.BState.Tower.Hp < 0 {
+		text := "You Won! Press ESC to Exit."
+		var textSize int32 = 64
+		textWidth := rl.MeasureText(text, textSize)
+		rl.DrawText(text, 800-(textWidth/2), 450, textSize, rl.White)
+	}
 }
 
 func (team TeamState) render(color rl.Color) {

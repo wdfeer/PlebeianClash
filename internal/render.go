@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"PlebeianClash/internal/util"
 	"strconv"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -16,16 +17,10 @@ func (state GameState) Render() {
 	state.AState.render(rl.DarkGreen)
 	state.BState.render(rl.DarkPurple)
 
-	if state.AState.Tower.Hp < 0 {
-		text := "You Lost! Press ESC to Exit."
-		var textSize int32 = 64
-		textWidth := rl.MeasureText(text, textSize)
-		rl.DrawText(text, 800-(textWidth/2), 450, textSize, rl.White)
-	} else if state.BState.Tower.Hp < 0 {
-		text := "You Won! Press ESC to Exit."
-		var textSize int32 = 64
-		textWidth := rl.MeasureText(text, textSize)
-		rl.DrawText(text, 800-(textWidth/2), 450, textSize, rl.White)
+	if state.AState.Tower.Hp <= 0 {
+		util.DrawTextCentered("You Lost! Press ESC to Exit.", 800, 450, 64, rl.White)
+	} else if state.BState.Tower.Hp <= 0 {
+		util.DrawTextCentered("You Won! Press ESC to Exit.", 800, 450, 64, rl.White)
 	}
 }
 
@@ -37,8 +32,6 @@ func (team TeamState) render(color rl.Color) {
 
 	if team.IsLocal {
 		text := strconv.FormatFloat(float64(team.Mana), 'f', 1, 32) + " Mana"
-		var textSize int32 = 40
-		textWidth := rl.MeasureText(text, textSize)
-		rl.DrawText(text, 800-(textWidth/2), 840, textSize, rl.SkyBlue)
+		util.DrawTextCentered(text, 800, 850, 40, rl.SkyBlue)
 	}
 }

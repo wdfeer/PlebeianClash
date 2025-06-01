@@ -18,9 +18,11 @@ func (state GameState) Render() {
 	state.BState.render(rl.DarkPurple)
 
 	if state.AState.Tower.Hp <= 0 {
-		util.DrawTextCentered("You Lost! Press ESC to Exit.", 800, 450, 64, rl.White)
+		util.DrawTextCentered("You Lost!", 800, 400, 64, rl.White)
+		util.DrawTextCentered("Press ESC to Exit or R to restart.", 800, 500, 64, rl.White)
 	} else if state.BState.Tower.Hp <= 0 {
-		util.DrawTextCentered("You Won! Press ESC to Exit.", 800, 450, 64, rl.White)
+		util.DrawTextCentered("You Won!", 800, 400, 64, rl.White)
+		util.DrawTextCentered("Press ESC to Exit or R to restart.", 800, 500, 64, rl.White)
 	}
 }
 

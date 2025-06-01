@@ -14,12 +14,16 @@ func (self TeamState) update(other TeamState) TeamState {
 	}
 
 	for i := range len(new.Units) {
-		if rl.Vector2Distance(new.Units[i].Position, other.Tower.Position) > 50 {
+		if rl.Vector2Distance(new.Units[i].Position, other.Tower.Position) > 40 {
 			new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, other.Tower.Position, 4)
 		}
 	}
 
-	// TODO: update tower hp
+	for _, u := range other.Units {
+		if rl.Vector2Distance(u.Position, self.Tower.Position) < 50 {
+			new.Tower.Hp -= 10
+		}
+	}
 
 	if self.Tower.Hp <= 0 {
 		rl.CloseWindow()

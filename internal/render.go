@@ -24,6 +24,10 @@ func (state GameState) Render() {
 		util.DrawTextCentered("You Won!", 800, 400, 64, rl.White)
 		util.DrawTextCentered("Press ESC to Exit or R to restart.", 800, 500, 64, rl.White)
 	}
+
+	if state.showControls {
+		util.DrawTextCentered("Left Click: summon knight (1 Mana)", 400, 350, 40, rl.White)
+	}
 }
 
 func (team TeamState) render(color rl.Color) {

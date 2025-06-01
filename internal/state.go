@@ -3,8 +3,9 @@ package internal
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 type GameState struct {
-	AState TeamState
-	BState TeamState
+	AState       TeamState
+	BState       TeamState
+	showControls bool
 }
 
 type TeamState struct {
@@ -45,4 +46,5 @@ var DefaultState = GameState{
 			Hp:       1000,
 		},
 	},
+	showControls: true,
 }

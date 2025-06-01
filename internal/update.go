@@ -8,9 +8,14 @@ import (
 
 func (self GameState) Update() GameState {
 	if self.AState.Tower.Hp > 0 && self.BState.Tower.Hp > 0 {
-		return GameState{self.AState.update(self.BState), self.BState.update(self.AState)}
+		if len(self.AState.Units) > 0 {
+			self.showControls = false
+		}
+		return GameState{self.AState.update(self.BState), self.BState.update(self.AState), self.showControls}
 	} else if rl.IsKeyPressed(rl.KeyR) {
-		return DefaultState
+		state := DefaultState
+		state.showControls = false
+		return state
 	} else {
 		return self
 	}

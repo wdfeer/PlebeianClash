@@ -9,7 +9,7 @@ func (self GameState) Update() GameState {
 func (self TeamState) update(other TeamState) TeamState {
 	new := self
 
-	if self.IsLocal && rl.IsMouseButtonPressed(rl.MouseLeftButton) {
+	if self.IsLocal && rl.IsMouseButtonPressed(rl.MouseLeftButton) && rl.GetMousePosition().X < 800 {
 		new.Units = append(new.Units, Unit{Type: Knight, Hp: 300, Position: rl.GetMousePosition()})
 	}
 

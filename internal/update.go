@@ -1,6 +1,10 @@
 package internal
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	"math/rand"
+
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 func (self GameState) Update() GameState {
 	if self.AState.Tower.Hp > 0 && self.BState.Tower.Hp > 0 {
@@ -17,11 +21,17 @@ func (self TeamState) update(other TeamState) TeamState {
 
 	if self.IsLocal {
 		if rl.IsMouseButtonPressed(rl.MouseLeftButton) && rl.GetMousePosition().X < 800 && self.Mana >= 1 {
-			new.Units = append(new.Units, Unit{Type: Knight, Hp: 300, Position: rl.GetMousePosition()})
+			unit := Unit{Type: Knight, Hp: 300, Position: rl.GetMousePosition()}
+			new.Units = append(new.Units, unit)
 			new.Mana -= 1
 		}
-	} else {
-		// TODO: spawn units
+	} else if self.Mana > 1 {
+		direction := rl.Vector2Normalize(rl.Vector2Subtract(other.Tower.Position, self.Tower.Position))
+		position := rl.Vector2Add(self.Tower.Position, rl.Vector2Scale(rl.Vector2Rotate(direction, (rand.Float32()-0.5)), 500))
+		unit := Unit{Type: Knight, Hp: 300, Position: position}
+
+		new.Units = append(new.Units, unit)
+		new.Mana -= 1
 	}
 
 	for i := range len(new.Units) {

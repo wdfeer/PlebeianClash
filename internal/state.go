@@ -9,10 +9,11 @@ type GameState struct {
 }
 
 type TeamState struct {
-	IsLocal bool
-	Tower   Tower
-	Units   []Unit
-	Mana    float32
+	IsLocal     bool
+	Mana        float32
+	Tower       Tower
+	Units       []Unit
+	Projectiles []Projectile
 }
 
 type Tower struct {
@@ -31,6 +32,11 @@ type UnitType uint8
 const (
 	Knight UnitType = iota
 )
+
+type Projectile struct {
+	Position rl.Vector2
+	Velocity rl.Vector2
+}
 
 var DefaultState = GameState{
 	AState: TeamState{

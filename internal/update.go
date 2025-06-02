@@ -42,6 +42,9 @@ func (self TeamState) update(other TeamState) TeamState {
 	}
 
 	new = new.updateUnits(other)
+	for i := range len(new.Projectiles) {
+		new.Projectiles[i].Position = rl.Vector2Add(new.Projectiles[i].Position, new.Projectiles[i].Velocity)
+	}
 
 	return new
 }
@@ -70,6 +73,12 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 		for _, u := range new.Units {
 			if rl.Vector2Distance(u.Position, new.Units[i].Position) < 35 {
 				new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, u.Position, -1.5)
+			}
+		}
+
+		for _, p := range other.Projectiles {
+			if rl.Vector2Distance(new.Units[i].Position, p.Position) < 15 {
+				new.Units[i].Hp -= 10
 			}
 		}
 	}

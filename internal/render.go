@@ -27,6 +27,7 @@ func (state GameState) Render() {
 
 	if state.showControls {
 		util.DrawTextCentered("Left Click: summon knight (1 Mana)", 400, 350, 40, rl.White)
+		util.DrawTextCentered("Left Click: summon archer (2 Mana)", 400, 550, 40, rl.White)
 	}
 }
 

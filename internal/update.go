@@ -65,7 +65,7 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 		if new.Units[i].Type == Melee {
 			attackRange = 50
 		} else {
-			attackRange = 250
+			attackRange = 350
 		}
 		target := other.Tower.Position
 		towerDistance := rl.Vector2Distance(new.Units[i].Position, target)
@@ -81,10 +81,10 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 
 		// Ranged shoot projectiles
 		if new.Units[i].Type == Ranged {
-			if new.Units[i].AttackTimer >= 40 && targetDistance <= attackRange {
+			if new.Units[i].AttackTimer >= 60 && targetDistance <= attackRange {
 				direction := rl.Vector2Normalize(rl.Vector2Subtract(target, new.Units[i].Position))
 				new.Projectiles = append(new.Projectiles, Projectile{
-					new.Units[i].Position, rl.Vector2Scale(direction, 3),
+					new.Units[i].Position, rl.Vector2Scale(direction, 2.7),
 				})
 				new.Units[i].AttackTimer = 0
 			} else {
@@ -102,7 +102,7 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 		// Take damage from enemy projectiles
 		for _, p := range other.Projectiles {
 			if rl.Vector2Distance(new.Units[i].Position, p.Position) < 10 {
-				new.Units[i].Hp -= 50
+				new.Units[i].Hp -= 60
 			}
 			if rl.Vector2Distance(new.Tower.Position, p.Position) < 10 {
 				new.Tower.Hp -= 5

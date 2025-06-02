@@ -22,15 +22,17 @@ type Tower struct {
 }
 
 type Unit struct {
-	Position rl.Vector2
-	Hp       int
-	Type     UnitType
+	Position    rl.Vector2
+	Hp          int
+	AttackTimer int
+	Type        UnitType
 }
 
 type UnitType uint8
 
 const (
-	Knight UnitType = iota
+	Melee UnitType = iota
+	Ranged
 )
 
 type Projectile struct {

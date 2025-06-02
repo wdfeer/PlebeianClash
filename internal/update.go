@@ -28,14 +28,14 @@ func (self TeamState) update(other TeamState) TeamState {
 
 	if self.IsLocal {
 		if rl.IsMouseButtonPressed(rl.MouseLeftButton) && rl.GetMousePosition().X < 800 && self.Mana >= 1 {
-			unit := Unit{Type: Knight, Hp: 300, Position: rl.GetMousePosition()}
+			unit := Unit{Type: Melee, Hp: 300, Position: rl.GetMousePosition()}
 			new.Units = append(new.Units, unit)
 			new.Mana -= 1
 		}
 	} else if self.Mana > 1 {
 		direction := rl.Vector2Normalize(rl.Vector2Subtract(other.Tower.Position, self.Tower.Position))
 		position := rl.Vector2Add(self.Tower.Position, rl.Vector2Scale(rl.Vector2Rotate(direction, (rand.Float32()-0.5)), 500))
-		unit := Unit{Type: Knight, Hp: 300, Position: position}
+		unit := Unit{Type: Melee, Hp: 300, Position: position}
 
 		new.Units = append(new.Units, unit)
 		new.Mana -= 1
@@ -52,30 +52,49 @@ func (self TeamState) update(other TeamState) TeamState {
 func (self TeamState) updateUnits(other TeamState) TeamState {
 	new := self
 
-	const attackRange = 50
+	var attackRange float32
 	const attackDamage = 10
 
 	for i := range len(new.Units) {
+		// Move to target
+		if new.Units[i].Type == Melee {
+			attackRange = 50
+		} else {
+			attackRange = 250
+		}
 		target := other.Tower.Position
 		towerDistance := rl.Vector2Distance(new.Units[i].Position, target)
 		targetDistance := towerDistance
-
 		unitIndex, unitDistance := new.Units[i].closestEnemy(other)
 		if unitDistance < towerDistance {
 			target = other.Units[unitIndex].Position
 			targetDistance = unitDistance
 		}
-
 		if targetDistance > attackRange-1 {
 			new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, target, 4)
 		}
 
+		// Ranged shoot projectiles
+		if new.Units[i].Type == Ranged {
+			if new.Units[i].AttackTimer >= 40 && targetDistance <= attackRange {
+				direction := rl.Vector2Normalize(rl.Vector2Subtract(target, new.Units[i].Position))
+				new.Projectiles = append(new.Projectiles, Projectile{
+					new.Units[i].Position, rl.Vector2Scale(direction, 5),
+				})
+				new.Units[i].AttackTimer = 0
+			} else {
+				new.Units[i].AttackTimer++
+			}
+		}
+
+		// Prevent friendlies going into each other
 		for _, u := range new.Units {
 			if rl.Vector2Distance(u.Position, new.Units[i].Position) < 35 {
 				new.Units[i].Position = rl.Vector2MoveTowards(new.Units[i].Position, u.Position, -1.5)
 			}
 		}
 
+		// Take damage from enemy projectiles
 		for _, p := range other.Projectiles {
 			if rl.Vector2Distance(new.Units[i].Position, p.Position) < 15 {
 				new.Units[i].Hp -= 10
@@ -83,7 +102,12 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 		}
 	}
 
+	// Take damage from enemy melee
 	for _, u := range other.Units {
+		if u.Type != Melee {
+			continue
+		}
+
 		if rl.Vector2Distance(u.Position, self.Tower.Position) < attackRange {
 			new.Tower.Hp -= attackDamage
 		}
@@ -94,6 +118,7 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 		}
 	}
 
+	// Delete dead units
 	newUnits := []Unit{}
 	for _, u := range new.Units {
 		if u.Hp > 0 {

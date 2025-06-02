@@ -32,8 +32,13 @@ func (state GameState) Render() {
 
 func (team TeamState) render(color rl.Color) {
 	rl.DrawCircle(int32(team.Tower.Position.X), int32(team.Tower.Position.Y), 32, color)
+
 	for _, u := range team.Units {
 		rl.DrawCircle(int32(u.Position.X), int32(u.Position.Y), 20, color)
+	}
+
+	for _, p := range team.Projectiles {
+		rl.DrawCircle(int32(p.Position.X), int32(p.Position.Y), 10, color)
 	}
 
 	if team.IsLocal {

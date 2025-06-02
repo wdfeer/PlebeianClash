@@ -101,7 +101,7 @@ func (self TeamState) updateUnits(other TeamState) TeamState {
 
 		// Take damage from enemy projectiles
 		for _, p := range other.Projectiles {
-			if rl.Vector2Distance(new.Units[i].Position, p.Position) < 15 {
+			if rl.Vector2Distance(new.Units[i].Position, p.Position) < 10 {
 				new.Units[i].Hp -= 10
 			}
 		}

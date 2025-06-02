@@ -26,11 +26,16 @@ func (self TeamState) update(other TeamState) TeamState {
 
 	new.Mana += 0.01
 
-	if self.IsLocal {
-		if rl.IsMouseButtonPressed(rl.MouseLeftButton) && rl.GetMousePosition().X < 800 && self.Mana >= 1 {
+	if self.IsLocal && rl.GetMousePosition().X < 800 {
+		if rl.IsMouseButtonPressed(rl.MouseLeftButton) && new.Mana >= 1 {
 			unit := Unit{Type: Melee, Hp: 300, Position: rl.GetMousePosition()}
 			new.Units = append(new.Units, unit)
 			new.Mana -= 1
+		}
+		if rl.IsMouseButtonPressed(rl.MouseRightButton) && new.Mana >= 2 {
+			unit := Unit{Type: Ranged, Hp: 200, Position: rl.GetMousePosition()}
+			new.Units = append(new.Units, unit)
+			new.Mana -= 2
 		}
 	} else if self.Mana > 1 {
 		direction := rl.Vector2Normalize(rl.Vector2Subtract(other.Tower.Position, self.Tower.Position))
